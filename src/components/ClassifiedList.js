@@ -39,8 +39,10 @@ class ClassifiedList extends Component {
 
   render() {
     return (
-      <div>
-        {this.renderList()}
+      <div className="container">
+        <div className="listClassifieds">
+          {this.renderList()}
+        </div>
       </div>
     )
   }
