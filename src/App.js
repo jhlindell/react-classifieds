@@ -43,13 +43,18 @@ class App extends Component {
     }
   }
 
+  selectProperty = (ad) => {
+    this.setState({selectedProperty: ad});
+  }
+
   render() {
     return (
       <Router>
         <div>
           <Route path="/" component={NavBar} />
           <Route path="/" component={()=> <ClassifiedDisplay ad={this.state.selectedProperty} />} />
-          <Route path="/" component={()=> <ClassifiedList classifieds={this.state.classifieds} />} />
+          <Route path="/" component={()=> <ClassifiedList classifieds={this.state.classifieds}
+          selectProperty={this.selectProperty}/>} />
         </div>
     </Router>
     );

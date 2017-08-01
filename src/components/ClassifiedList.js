@@ -9,7 +9,7 @@ class ClassifiedList extends Component {
       return <div>loading</div>
     }
     return this.props.classifieds.map((ad, i) => {
-      return (<ClassifiedAd key={i} ad={ad}/>);
+      return (<ClassifiedAd key={i} ad={ad} selectProperty={this.props.selectProperty}/>);
     });
   }
 

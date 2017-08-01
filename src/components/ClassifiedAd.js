@@ -4,12 +4,13 @@ import { Card,CardText, CardBlock,
 
 class ClassifiedAd extends Component {
   render() {
+    console.log(this.props);
     return (
       <div>
         <Col xs="12" className="ClassifiedCard">
-          <Card>
+          <Card onClick={() => this.props.selectProperty(this.props.ad)}>
             <CardBlock className="cardTitle">
-              <CardTitle classname="titleText">
+              <CardTitle className="titleText">
                 {this.props.ad.title}
               </CardTitle>
               <CardText>
