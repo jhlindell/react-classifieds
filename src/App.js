@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ClassifiedList from './components/ClassifiedList';
 
 class App extends Component {
+  
+
   render() {
     return (
       <div>

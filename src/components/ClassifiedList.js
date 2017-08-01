@@ -44,7 +44,6 @@ class ClassifiedList extends Component {
       </div>
     )
   }
-
 }
 
 export default ClassifiedList;
