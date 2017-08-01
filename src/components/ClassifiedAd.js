@@ -12,8 +12,6 @@ class ClassifiedAd extends Component {
               <CardTitle classname="titleText">
                 {this.props.ad.title}
               </CardTitle>
-            </CardBlock>
-            <CardBlock>
               <CardText>
                 {this.props.ad.description}
               </CardText>
