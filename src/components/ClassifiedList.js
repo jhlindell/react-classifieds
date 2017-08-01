@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import ClassifiedAd from './ClassifiedAd';
 
 class ClassifiedList extends Component {
-  
+
   renderList() {
     if (!this.props.classifieds) {
       console.log(this.props);
       return <div>loading</div>
     }
     return this.props.classifieds.map((ad, i) => {
-      return (<ClassifiedAd key={i} ad={ad}/>)
+      return (<ClassifiedAd key={i} ad={ad}/>);
     });
   }
 
@@ -20,7 +20,7 @@ class ClassifiedList extends Component {
           {this.renderList()}
         </div>
       </div>
-    )
+    );
   }
 }
 

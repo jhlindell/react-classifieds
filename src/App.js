@@ -5,6 +5,7 @@ import {
   Route,
 } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import ClassifiedDisplay from './components/ClassifiedDisplay';
 
 class App extends Component {
   constructor(props) {
@@ -29,7 +30,16 @@ class App extends Component {
           created_at: new Date('2016-06-26 14:26:16 UTC'),
           updated_at: new Date('2016-06-26 14:26:16 UTC')
         }
-      ]
+      ],
+      selectedProperty: {
+        id:2,
+        title:'Pikachu 9" Plush Stuffed Toy',
+        description:'Polyester fiber construction Officially licensed.',
+        price:10,
+        item_image:'https://images-na.ssl-images-amazon.com/images/I/41VwGotRZsL._SY300_.jpg',
+        created_at: new Date('2016-06-26 14:26:16 UTC'),
+        updated_at: new Date('2016-06-26 14:26:16 UTC')
+      }
     }
   }
 
@@ -37,8 +47,9 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Route path="/"  component={NavBar} />
-          <Route path="/"  component={()=> <ClassifiedList classifieds={this.state.classifieds} />} />
+          <Route path="/" component={NavBar} />
+          <Route path="/" component={()=> <ClassifiedDisplay ad={this.state.selectedProperty} />} />
+          <Route path="/" component={()=> <ClassifiedList classifieds={this.state.classifieds} />} />
         </div>
     </Router>
     );

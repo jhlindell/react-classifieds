@@ -19,7 +19,7 @@ class ClassifiedAd extends Component {
           </Card>
         </Col>
       </div>
-    )
+    );
   }
 }
 
