@@ -4,7 +4,6 @@ import { Card,CardText, CardBlock,
 
 class ClassifiedAd extends Component {
   render() {
-    console.log(this.props);
     return (
       <div>
         <Col xs="12" className="ClassifiedCard">

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ClassifiedAd from './ClassifiedAd';
+import {Row} from 'reactstrap';
 
 class ClassifiedList extends Component {
 
@@ -15,11 +16,11 @@ class ClassifiedList extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="listClassifieds">
+      <Row className="listClassifieds">
+        <div>
           {this.renderList()}
         </div>
-      </div>
+      </Row>
     );
   }
 }
