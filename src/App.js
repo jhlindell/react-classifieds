@@ -48,11 +48,11 @@ class App extends Component {
     return (
       <Router>
         <Container>
-          <div>
+          
             <Route path="/" component={NavBar}/>
             <Route path="/" component={() => <ClassifiedDisplay ad={this.state.selectedProperty}/>}/>
             <Route path="/" component={() => <ClassifiedList classifieds={this.state.classifieds} selectProperty={this.selectProperty}/>}/>
-          </div>
+
         </Container>
       </Router>
     );

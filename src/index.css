@@ -11,3 +11,8 @@ body {
 .classifiedDisplay {
   margin-top:80px;
 }
+
+.displayImage {
+  height: 200px;
+  width: 200px;
+}
