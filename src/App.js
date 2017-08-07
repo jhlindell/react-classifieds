@@ -14,7 +14,8 @@ class App extends Component {
       selectedAd: {},
       showEditForm: false,
       populateEditForm: false,
-      buttonBarToggle: true
+      buttonBarToggle: true,
+      sortByAscending: true
     }
   }
 
@@ -26,6 +27,7 @@ class App extends Component {
     const response = await fetch('http://localhost:8080/classifieds')
     const json = await response.json();
     this.setState({classifieds: json});
+    this.sortAds();
     this.selectAd(this.state.classifieds[0]);
   }
 
@@ -40,6 +42,7 @@ class App extends Component {
     });
     const returnedAd = await response.json();
     this.setState({classifieds: [...this.state.classifieds, returnedAd]});
+    this.fetchAllAds();
   }
 
   async patchAdToServer(ad){
@@ -79,6 +82,7 @@ class App extends Component {
 
   editAd = (ad) => {
     this.patchAdToServer(ad);
+    this.setState({populateEditForm: false});
   }
 
   postAdButton = () => {
@@ -93,7 +97,6 @@ class App extends Component {
   }
 
   deleteAdButton = () => {
-    this.toggleButtonBar();
     this.deleteAdFromServer();
   }
 
@@ -103,6 +106,44 @@ class App extends Component {
     } else {
       this.setState({buttonBarToggle: true});
     }
+  }
+
+  sortAds(){
+    let ads = this.state.classifieds;
+    if(this.state.sortByAscending){
+      ads.sort(function(a,b){
+        let titleA = a.title.toUpperCase();
+        let titleB = b.title.toUpperCase();
+        if (titleA < titleB){
+          return -1;
+        }
+        if (titleA > titleB){
+          return 1;
+        }
+        return 0;
+      });
+    } else {
+      ads.sort(function(a,b){
+        let titleA = a.title.toUpperCase();
+        let titleB = b.title.toUpperCase();
+        if (titleA > titleB){
+          return -1;
+        }
+        if (titleA < titleB){
+          return 1;
+        }
+        return 0;
+      });
+    }
+    this.setState({classifieds: ads});
+  }
+
+  sortByAscButton = () => {
+    this.setState({sortByAscending: true}, this.sortAds);
+  }
+
+  sortByDescButton = () => {
+    this.setState({sortByAscending: false}, this.sortAds);
   }
 
   render() {
@@ -124,6 +165,8 @@ class App extends Component {
         />}
         {this.state.buttonBarToggle &&
           <ButtonBar
+            sortByAscButton = {this.sortByAscButton}
+            sortByDescButton = {this.sortByDescButton}
             postAdButton = {this.postAdButton}
             editAdButton = {this.editAdButton}
             deleteAdButton = {this.deleteAdButton}
