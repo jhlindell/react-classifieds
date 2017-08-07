@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   Button,
   Col,
-  Container,
   Form,
   FormGroup,
   Label,
@@ -25,7 +24,6 @@ class PostAdForm extends Component {
   }
 
   componentDidMount(){
-    console.log(this.props);
     if(this.props.populateEditForm){
       this.setState({
         title: this.props.ad.title,
@@ -56,6 +54,7 @@ class PostAdForm extends Component {
       description: ''
     });
     this.props.toggleEditForm();
+    this.props.toggleButtonBar();
   }
 
   onEditSubmit(event){
@@ -64,6 +63,7 @@ class PostAdForm extends Component {
     ad.id = this.props.ad.id;
     this.props.editAd(ad);
     this.props.toggleEditForm();
+    this.props.toggleButtonBar();
   }
 
   onCancel(event){
@@ -75,6 +75,7 @@ class PostAdForm extends Component {
       description: ''
     });
     this.props.toggleEditForm();
+    this.props.toggleButtonBar();
   }
 
   render() {
@@ -117,10 +118,14 @@ class PostAdForm extends Component {
               }} value={this.state.description} placeholder=""/>
             </Col>
           </FormGroup>
-          <Button onClick={(e) => {this.onFormSubmit(e)}}>Post Ad</Button>
-          <Button onClick={(e) => {this.onEditSubmit(e)}}>Edit Ad</Button>
-          <Button onClick={(e) => {this.onCancel(e)}}>Cancel</Button>
-
+          {!this.props.populateEditForm &&
+          <Button className="button"
+            onClick={(e) => {this.onFormSubmit(e)}}>Post Ad</Button>}
+          {this.props.populateEditForm &&
+          <Button className="button"
+            onClick={(e) => {this.onEditSubmit(e)}}>Edit Ad</Button>}
+          <Button className="button"
+            onClick={(e) => {this.onCancel(e)}}>Cancel</Button>
         </Form>
         </Col>
       </Row>

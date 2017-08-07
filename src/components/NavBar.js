@@ -1,12 +1,7 @@
 import React from "react";
 import {
-  Collapse,
-  Nav,
   Navbar,
-  NavItem,
-  NavLink,
   NavbarBrand,
-  NavbarToggler,
   Row
   } from 'reactstrap';
 

@@ -24,3 +24,7 @@ body {
 .editForm {
   margin-top:80px;
 }
+
+.button {
+  margin: 0 10px;
+}

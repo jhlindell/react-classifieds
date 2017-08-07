@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ClassifiedList from './components/ClassifiedList';
-import { BrowserRouter as Router, Route} from 'react-router-dom';
 import NavBar from './components/NavBar';
 import ClassifiedDisplay from './components/ClassifiedDisplay';
 import { Container } from 'reactstrap';
@@ -14,7 +13,8 @@ class App extends Component {
       classifieds: [],
       selectedAd: {},
       showEditForm: false,
-      populateEditForm: false
+      populateEditForm: false,
+      buttonBarToggle: true
     }
   }
 
@@ -54,6 +54,13 @@ class App extends Component {
     this.fetchAllAds();
   }
 
+  async deleteAdFromServer(){
+    await fetch('http://localhost:8080/classifieds/' + this.state.selectedAd.id, {
+      method: 'DELETE'
+    });
+    this.fetchAllAds();
+  }
+
   toggleEditForm = () => {
     if(this.state.showEditForm){
       this.setState({showEditForm: false});
@@ -74,9 +81,28 @@ class App extends Component {
     this.patchAdToServer(ad);
   }
 
+  postAdButton = () => {
+    this.toggleButtonBar();
+    this.toggleEditForm();
+  }
+
   editAdButton = () => {
+    this.toggleButtonBar();
     this.setState({populateEditForm: true});
     this.toggleEditForm();
+  }
+
+  deleteAdButton = () => {
+    this.toggleButtonBar();
+    this.deleteAdFromServer();
+  }
+
+  toggleButtonBar = () => {
+    if(this.state.buttonBarToggle){
+      this.setState({buttonBarToggle: false});
+    } else {
+      this.setState({buttonBarToggle: true});
+    }
   }
 
   render() {
@@ -87,6 +113,7 @@ class App extends Component {
           <PostAdForm
             ad = {this.state.selectedAd}
             toggleEditForm = {this.toggleEditForm}
+            toggleButtonBar = {this.toggleButtonBar}
             addAd = {this.addAd}
             editAd = {this.editAd}
             populateEditForm = {this.state.populateEditForm}
@@ -95,10 +122,12 @@ class App extends Component {
           <ClassifiedDisplay
             ad={this.state.selectedAd}
         />}
-        <ButtonBar
-          toggleEditForm = {this.toggleEditForm}
-          editAdButton = {this.editAdButton}
-        />
+        {this.state.buttonBarToggle &&
+          <ButtonBar
+            postAdButton = {this.postAdButton}
+            editAdButton = {this.editAdButton}
+            deleteAdButton = {this.deleteAdButton}
+          />}
         <ClassifiedList
           classifieds={this.state.classifieds}
           selectAd={this.selectAd}

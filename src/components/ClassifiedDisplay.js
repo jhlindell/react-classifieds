@@ -5,7 +5,6 @@ import {
   CardBlock,
   CardTitle,
   Col,
-  Jumbotron,
   Media,
   Row
 } from 'reactstrap';
@@ -18,7 +17,7 @@ class ClassifiedDisplay extends Component {
         <Card>
           <Media>
           <Media left>
-            <img className="displayImage" src={this.props.ad.item_image} alt="item picture should go here"/>
+            <img className="displayImage" src={this.props.ad.item_image} alt="something should go here"/>
           </Media>
           <Media body>
             <CardBlock>
@@ -42,23 +41,3 @@ class ClassifiedDisplay extends Component {
 }
 
 export default ClassifiedDisplay;
-
-{/* <Row className="classifiedDisplay">
-  <Col xs="12">
-    <Card>
-      <img className="displayImage" src={this.props.ad.item_image} alt="item picture should go here" />
-      <CardBlock>
-        <CardTitle>
-          {this.props.ad.title}
-        </CardTitle>
-        <CardText>
-          {this.props.ad.description}
-        </CardText>
-        <CardText>
-          Price: {this.props.ad.price}
-        </CardText>
-      </CardBlock>
-    </Card>
-  </Col>
-</Row> */
-}
