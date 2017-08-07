@@ -7,7 +7,7 @@ class ClassifiedAd extends Component {
     return (
       <div>
         <Col xs="12" className="ClassifiedCard">
-          <Card onClick={() => this.props.selectProperty(this.props.ad)}>
+          <Card onClick={() => this.props.selectAd(this.props.ad)}>
             <CardBlock className="cardTitle">
               <CardTitle className="titleText">
                 {this.props.ad.title}

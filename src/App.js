@@ -5,41 +5,27 @@ import NavBar from './components/NavBar';
 import ClassifiedDisplay from './components/ClassifiedDisplay';
 import { Container } from 'reactstrap';
 import ButtonBar from './components/ButtonBar';
+import PostAdForm from './components/PostAdForm';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      classifieds: [
-        {
-          id: 1,
-          title: 'NES Classic',
-          description: 'I got lucky and found it, and decided to charge 10x what it was worth.',
-          price: 600,
-          item_image: 'http://www.nintendo.com/images/page/nes-classic/nes-classic-edition-box.png',
-          created_at: new Date('2016-06-26 14:26:16 UTC'),
-          updated_at: new Date('2016-06-26 14:26:16 UTC')
-        }, {
-          id: 2,
-          title: 'Pikachu 9" Plush Stuffed Toy',
-          description: 'Polyester fiber construction Officially licensed.',
-          price: 10,
-          item_image: 'https://images-na.ssl-images-amazon.com/images/I/41VwGotRZsL._SY300_.jpg',
-          created_at: new Date('2016-06-26 14:26:16 UTC'),
-          updated_at: new Date('2016-06-26 14:26:16 UTC')
-        }
-      ],
-      selectedAd: {
-        id: 2,
-        title: 'Pikachu 9" Plush Stuffed Toy',
-        description: 'Polyester fiber construction Officially licensed.',
-        price: 10,
-        item_image: 'https://images-na.ssl-images-amazon.com/images/I/41VwGotRZsL._SY300_.jpg',
-        created_at: new Date('2016-06-26 14:26:16 UTC'),
-        updated_at: new Date('2016-06-26 14:26:16 UTC')
-      },
+      classifieds: [],
+      selectedAd: {},
       showEditForm: false
     }
+  }
+
+  componentDidMount() {
+    this.fetchAllAds();
+  }
+
+  async fetchAllAds() {
+    const response = await fetch('http://localhost:8080/classifieds')
+    const json = await response.json();
+    this.setState({classifieds: json});
+    this.selectAd(this.state.classifieds[0]);
   }
 
   toggleEditForm = () => {
@@ -50,21 +36,34 @@ class App extends Component {
     }
   }
 
-  selectProperty = (ad) => {
+  selectAd = (ad) => {
     this.setState({selectedAd: ad});
+  }
+
+  addAd = (ad) => {
+    console.log("saving ad");
+    this.setState({classifieds: [...this.state.classifieds, ad]});
   }
 
   render() {
     return (
       <Container>
         <NavBar />
-        <ClassifiedDisplay
-          ad={this.state.selectedAd}
+        {this.state.showEditForm &&
+          <PostAdForm
+            toggleEditForm = {this.toggleEditForm}
+            addAd = {this.addAd}
+          />}
+        {!this.state.showEditForm &&
+          <ClassifiedDisplay
+            ad={this.state.selectedAd}
+        />}
+        <ButtonBar
+          toggleEditForm = {this.toggleEditForm}
         />
-        <ButtonBar />
         <ClassifiedList
           classifieds={this.state.classifieds}
-          selectProperty={this.selectAd}
+          selectAd={this.selectAd}
         />
       </Container>
     );

@@ -14,6 +14,7 @@ class ClassifiedDisplay extends Component {
   render() {
     return (
       <Row className="classifiedDisplay">
+        <Col xs="12">
         <Card>
           <Media>
           <Media left>
@@ -34,6 +35,7 @@ class ClassifiedDisplay extends Component {
           </Media>
           </Media>
         </Card>
+      </Col>
       </Row>
     );
   }

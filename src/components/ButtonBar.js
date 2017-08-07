@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
-import { Button, Row } from 'reactstrap';
+import { Col, Button, Row } from 'reactstrap';
 
 class ButtonBar extends Component {
   render() {
     return (
       <Row className="buttonBar">
-        <Button>Post New Ad</Button>
-        <Button>Edit Ad</Button>
+        <Col xs={{
+          size: 10,
+          offset: 1
+        }}>
+        <Button onClick={this.props.toggleEditForm}>Post New Ad</Button>
+        <Button onClick={this.props.toggleEditForm}>Edit Ad</Button>
+        </Col>
       </Row>
     );
   }

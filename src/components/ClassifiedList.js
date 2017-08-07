@@ -1,25 +1,24 @@
 import React, {Component} from 'react';
 import ClassifiedAd from './ClassifiedAd';
-import {Row} from 'reactstrap';
+import {Col, Row} from 'reactstrap';
 
 class ClassifiedList extends Component {
 
   renderList() {
     if (!this.props.classifieds) {
-      console.log(this.props);
       return <div>loading</div>
     }
     return this.props.classifieds.map((ad, i) => {
-      return (<ClassifiedAd key={i} ad={ad} selectProperty={this.props.selectProperty}/>);
+      return (<ClassifiedAd key={i} ad={ad} selectAd={this.props.selectAd}/>);
     });
   }
 
   render() {
     return (
       <Row className="listClassifieds">
-        <div>
+        <Col xs="12">
           {this.renderList()}
-        </div>
+        </Col>
       </Row>
     );
   }
