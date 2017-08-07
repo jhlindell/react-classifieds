@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 import NavBar from './components/NavBar';
 import ClassifiedDisplay from './components/ClassifiedDisplay';
 import { Container } from 'reactstrap';
+import ButtonBar from './components/ButtonBar';
 
 class App extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class App extends Component {
           updated_at: new Date('2016-06-26 14:26:16 UTC')
         }
       ],
-      selectedProperty: {
+      selectedAd: {
         id: 2,
         title: 'Pikachu 9" Plush Stuffed Toy',
         description: 'Polyester fiber construction Officially licensed.',
@@ -36,25 +37,36 @@ class App extends Component {
         item_image: 'https://images-na.ssl-images-amazon.com/images/I/41VwGotRZsL._SY300_.jpg',
         created_at: new Date('2016-06-26 14:26:16 UTC'),
         updated_at: new Date('2016-06-26 14:26:16 UTC')
-      }
+      },
+      showEditForm: false
+    }
+  }
+
+  toggleEditForm = () => {
+    if(this.state.showEditForm){
+      this.setState({showEditForm: false});
+    } else {
+      this.setState({showEditForm: true});
     }
   }
 
   selectProperty = (ad) => {
-    this.setState({selectedProperty: ad});
+    this.setState({selectedAd: ad});
   }
 
   render() {
     return (
-      <Router>
-        <Container>
-          
-            <Route path="/" component={NavBar}/>
-            <Route path="/" component={() => <ClassifiedDisplay ad={this.state.selectedProperty}/>}/>
-            <Route path="/" component={() => <ClassifiedList classifieds={this.state.classifieds} selectProperty={this.selectProperty}/>}/>
-
-        </Container>
-      </Router>
+      <Container>
+        <NavBar />
+        <ClassifiedDisplay
+          ad={this.state.selectedAd}
+        />
+        <ButtonBar />
+        <ClassifiedList
+          classifieds={this.state.classifieds}
+          selectProperty={this.selectAd}
+        />
+      </Container>
     );
   }
 }

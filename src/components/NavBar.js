@@ -1,8 +1,32 @@
 import React from "react";
-import { Navbar, NavbarBrand, Row} from 'reactstrap';
+import {
+  Collapse,
+  Nav,
+  Navbar,
+  NavItem,
+  NavLink,
+  NavbarBrand,
+  NavbarToggler,
+  Row
+  } from 'reactstrap';
 
 class NavBar extends React.Component {
-  render(){
+  constructor(props) {
+    super(props);
+
+    this.toggleNavbar = this.toggleNavbar.bind(this);
+    this.state = {
+      collapsed: true
+    };
+  }
+
+  toggleNavbar() {
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
+  }
+
+  render() {
     return (
       <Row>
         <Navbar color="faded" light toggleable className="fixed-top navBarFixed">
