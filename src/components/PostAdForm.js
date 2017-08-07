@@ -21,6 +21,19 @@ class PostAdForm extends Component {
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
+    this.onEditSubmit = this.onEditSubmit.bind(this);
+  }
+
+  componentDidMount(){
+    console.log(this.props);
+    if(this.props.populateEditForm){
+      this.setState({
+        title: this.props.ad.title,
+        price: this.props.ad.price,
+        item_image: this.props.ad.item_image,
+        description: this.props.ad.description
+      });
+    }
   }
 
   handleInputChange(event){
@@ -42,6 +55,14 @@ class PostAdForm extends Component {
       item_image: '',
       description: ''
     });
+    this.props.toggleEditForm();
+  }
+
+  onEditSubmit(event){
+    event.preventDefault();
+    let ad = this.state;
+    ad.id = this.props.ad.id;
+    this.props.editAd(ad);
     this.props.toggleEditForm();
   }
 
@@ -97,7 +118,9 @@ class PostAdForm extends Component {
             </Col>
           </FormGroup>
           <Button onClick={(e) => {this.onFormSubmit(e)}}>Post Ad</Button>
+          <Button onClick={(e) => {this.onEditSubmit(e)}}>Edit Ad</Button>
           <Button onClick={(e) => {this.onCancel(e)}}>Cancel</Button>
+
         </Form>
         </Col>
       </Row>

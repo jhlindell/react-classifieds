@@ -13,7 +13,8 @@ class App extends Component {
     this.state = {
       classifieds: [],
       selectedAd: {},
-      showEditForm: false
+      showEditForm: false,
+      populateEditForm: false
     }
   }
 
@@ -26,6 +27,31 @@ class App extends Component {
     const json = await response.json();
     this.setState({classifieds: json});
     this.selectAd(this.state.classifieds[0]);
+  }
+
+  async postAdToServer(ad){
+    const response = await fetch('http://localhost:8080/classifieds', {
+      method: 'POST',
+      body: JSON.stringify(ad),
+      headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+    });
+    const returnedAd = await response.json();
+    this.setState({classifieds: [...this.state.classifieds, returnedAd]});
+  }
+
+  async patchAdToServer(ad){
+    await fetch('http://localhost:8080/classifieds/' + ad.id, {
+      method: 'PATCH',
+      body: JSON.stringify(ad),
+      headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+    });
+    this.fetchAllAds();
   }
 
   toggleEditForm = () => {
@@ -41,8 +67,16 @@ class App extends Component {
   }
 
   addAd = (ad) => {
-    console.log("saving ad");
-    this.setState({classifieds: [...this.state.classifieds, ad]});
+    this.postAdToServer(ad);
+  }
+
+  editAd = (ad) => {
+    this.patchAdToServer(ad);
+  }
+
+  editAdButton = () => {
+    this.setState({populateEditForm: true});
+    this.toggleEditForm();
   }
 
   render() {
@@ -51,8 +85,11 @@ class App extends Component {
         <NavBar />
         {this.state.showEditForm &&
           <PostAdForm
+            ad = {this.state.selectedAd}
             toggleEditForm = {this.toggleEditForm}
             addAd = {this.addAd}
+            editAd = {this.editAd}
+            populateEditForm = {this.state.populateEditForm}
           />}
         {!this.state.showEditForm &&
           <ClassifiedDisplay
@@ -60,6 +97,7 @@ class App extends Component {
         />}
         <ButtonBar
           toggleEditForm = {this.toggleEditForm}
+          editAdButton = {this.editAdButton}
         />
         <ClassifiedList
           classifieds={this.state.classifieds}

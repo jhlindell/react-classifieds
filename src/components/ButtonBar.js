@@ -10,7 +10,7 @@ class ButtonBar extends Component {
           offset: 1
         }}>
         <Button onClick={this.props.toggleEditForm}>Post New Ad</Button>
-        <Button onClick={this.props.toggleEditForm}>Edit Ad</Button>
+        <Button onClick={this.props.editAdButton}>Edit Ad</Button>
         </Col>
       </Row>
     );
