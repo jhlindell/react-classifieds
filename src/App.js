@@ -1,60 +1,181 @@
 import React, { Component } from 'react';
 import ClassifiedList from './components/ClassifiedList';
-import { BrowserRouter as Router, Route} from 'react-router-dom';
 import NavBar from './components/NavBar';
 import ClassifiedDisplay from './components/ClassifiedDisplay';
 import { Container } from 'reactstrap';
+import ButtonBar from './components/ButtonBar';
+import PostAdForm from './components/PostAdForm';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      classifieds: [
-        {
-          id: 1,
-          title: 'NES Classic',
-          description: 'I got lucky and found it, and decided to charge 10x what it was worth.',
-          price: 600,
-          item_image: 'http://www.nintendo.com/images/page/nes-classic/nes-classic-edition-box.png',
-          created_at: new Date('2016-06-26 14:26:16 UTC'),
-          updated_at: new Date('2016-06-26 14:26:16 UTC')
-        }, {
-          id: 2,
-          title: 'Pikachu 9" Plush Stuffed Toy',
-          description: 'Polyester fiber construction Officially licensed.',
-          price: 10,
-          item_image: 'https://images-na.ssl-images-amazon.com/images/I/41VwGotRZsL._SY300_.jpg',
-          created_at: new Date('2016-06-26 14:26:16 UTC'),
-          updated_at: new Date('2016-06-26 14:26:16 UTC')
-        }
-      ],
-      selectedProperty: {
-        id: 2,
-        title: 'Pikachu 9" Plush Stuffed Toy',
-        description: 'Polyester fiber construction Officially licensed.',
-        price: 10,
-        item_image: 'https://images-na.ssl-images-amazon.com/images/I/41VwGotRZsL._SY300_.jpg',
-        created_at: new Date('2016-06-26 14:26:16 UTC'),
-        updated_at: new Date('2016-06-26 14:26:16 UTC')
-      }
+      classifieds: [],
+      selectedAd: {},
+      showEditForm: false,
+      populateEditForm: false,
+      buttonBarToggle: true,
+      sortByAscending: true
     }
   }
 
-  selectProperty = (ad) => {
-    this.setState({selectedProperty: ad});
+  componentDidMount() {
+    this.fetchAllAds();
+  }
+
+  async fetchAllAds() {
+    const response = await fetch('http://localhost:8080/classifieds')
+    const json = await response.json();
+    this.setState({classifieds: json});
+    this.sortAds();
+    this.selectAd(this.state.classifieds[0]);
+  }
+
+  async postAdToServer(ad){
+    const response = await fetch('http://localhost:8080/classifieds', {
+      method: 'POST',
+      body: JSON.stringify(ad),
+      headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+    });
+    const returnedAd = await response.json();
+    this.setState({classifieds: [...this.state.classifieds, returnedAd]});
+    this.fetchAllAds();
+  }
+
+  async patchAdToServer(ad){
+    await fetch('http://localhost:8080/classifieds/' + ad.id, {
+      method: 'PATCH',
+      body: JSON.stringify(ad),
+      headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+    });
+    this.fetchAllAds();
+  }
+
+  async deleteAdFromServer(){
+    await fetch('http://localhost:8080/classifieds/' + this.state.selectedAd.id, {
+      method: 'DELETE'
+    });
+    this.fetchAllAds();
+  }
+
+  toggleEditForm = () => {
+    if(this.state.showEditForm){
+      this.setState({showEditForm: false});
+    } else {
+      this.setState({showEditForm: true});
+    }
+  }
+
+  selectAd = (ad) => {
+    this.setState({selectedAd: ad});
+  }
+
+  addAd = (ad) => {
+    this.postAdToServer(ad);
+  }
+
+  editAd = (ad) => {
+    this.patchAdToServer(ad);
+    this.setState({populateEditForm: false});
+  }
+
+  postAdButton = () => {
+    this.toggleButtonBar();
+    this.toggleEditForm();
+  }
+
+  editAdButton = () => {
+    this.toggleButtonBar();
+    this.setState({populateEditForm: true});
+    this.toggleEditForm();
+  }
+
+  deleteAdButton = () => {
+    this.deleteAdFromServer();
+  }
+
+  toggleButtonBar = () => {
+    if(this.state.buttonBarToggle){
+      this.setState({buttonBarToggle: false});
+    } else {
+      this.setState({buttonBarToggle: true});
+    }
+  }
+
+  sortAds(){
+    let ads = this.state.classifieds;
+    if(this.state.sortByAscending){
+      ads.sort(function(a,b){
+        let titleA = a.title.toUpperCase();
+        let titleB = b.title.toUpperCase();
+        if (titleA < titleB){
+          return -1;
+        }
+        if (titleA > titleB){
+          return 1;
+        }
+        return 0;
+      });
+    } else {
+      ads.sort(function(a,b){
+        let titleA = a.title.toUpperCase();
+        let titleB = b.title.toUpperCase();
+        if (titleA > titleB){
+          return -1;
+        }
+        if (titleA < titleB){
+          return 1;
+        }
+        return 0;
+      });
+    }
+    this.setState({classifieds: ads});
+  }
+
+  sortByAscButton = () => {
+    this.setState({sortByAscending: true}, this.sortAds);
+  }
+
+  sortByDescButton = () => {
+    this.setState({sortByAscending: false}, this.sortAds);
   }
 
   render() {
     return (
-      <Router>
-        <Container>
-          
-            <Route path="/" component={NavBar}/>
-            <Route path="/" component={() => <ClassifiedDisplay ad={this.state.selectedProperty}/>}/>
-            <Route path="/" component={() => <ClassifiedList classifieds={this.state.classifieds} selectProperty={this.selectProperty}/>}/>
-
-        </Container>
-      </Router>
+      <Container>
+        <NavBar />
+        {this.state.showEditForm &&
+          <PostAdForm
+            ad = {this.state.selectedAd}
+            toggleEditForm = {this.toggleEditForm}
+            toggleButtonBar = {this.toggleButtonBar}
+            addAd = {this.addAd}
+            editAd = {this.editAd}
+            populateEditForm = {this.state.populateEditForm}
+          />}
+        {!this.state.showEditForm &&
+          <ClassifiedDisplay
+            ad={this.state.selectedAd}
+        />}
+        {this.state.buttonBarToggle &&
+          <ButtonBar
+            sortByAscButton = {this.sortByAscButton}
+            sortByDescButton = {this.sortByDescButton}
+            postAdButton = {this.postAdButton}
+            editAdButton = {this.editAdButton}
+            deleteAdButton = {this.deleteAdButton}
+          />}
+        <ClassifiedList
+          classifieds={this.state.classifieds}
+          selectAd={this.selectAd}
+        />
+      </Container>
     );
   }
 }

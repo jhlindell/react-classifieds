@@ -16,3 +16,15 @@ body {
   height: 200px;
   width: 200px;
 }
+
+.buttonBar {
+  margin-top: 40px;
+}
+
+.editForm {
+  margin-top:80px;
+}
+
+.button {
+  margin: 0 10px;
+}
